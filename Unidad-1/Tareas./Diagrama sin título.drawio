@@ -1,9 +1,36 @@
-<mxfile host="app.diagrams.net" modified="2023-10-05T10:24:36.897Z" agent="Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" version="22.0.2" etag="OWyCGPfic_Dmp969dy9N" type="github">
+<mxfile host="app.diagrams.net" modified="2023-10-05T10:39:04.138Z" agent="Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="8x3au408hlCMpVvI3BFF" version="22.0.2" type="github">
   <diagram name="Página-1" id="Mka_hPVT99Yjn6llJlfG">
-    <mxGraphModel>
+    <mxGraphModel dx="1050" dy="1704" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-1" value="estudiante" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="380" y="90" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-2" value="curso" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="280" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-3" value="aula" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="400" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-4" value="profesor" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="180" y="430" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-5" value="materia" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="370" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-6" value="actividad extracurricular" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="590" y="240" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-7" value="asistencias" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="170" y="-30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-8" value="calificación" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="570" y="-30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OjUDIB-_pPHaeTFg9-ev-11" value="matriculado" style="shape=rhombus;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="170" width="106" height="60" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
