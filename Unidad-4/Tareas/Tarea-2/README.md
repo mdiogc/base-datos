@@ -1,4 +1,4 @@
-# Tarea-2 sobre sqlite
+# Tarea-2 sobre sqlite3
 
 
 ```sql
@@ -16,3 +16,4 @@ anio integer not null,
 id_propietario integer references propietarios(id_propietario));
 
 ```
+
