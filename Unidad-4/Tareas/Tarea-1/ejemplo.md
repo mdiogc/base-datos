@@ -1,6 +1,5 @@
 <div align="justify";>
 
-
 # Mis primeros pasos en SQL
 
 *Para empezar con la creación y manipulación en mi primera base de datos SQLITE3 abriremos la línea de comandos.*
@@ -25,6 +24,7 @@
   <img width="" height="250" src="img/1.png">
 </p>
 
+---
 
 
 **2. Obtén las entradas con el campo entero mayor a 50.**
@@ -34,7 +34,7 @@
   <img width="" height="250" src="img/campo mayor de 50.png">
 </p>
 
-
+---
 
 
 **3. Elimina las entradas donde el campo booleano es igual a True.**
@@ -45,7 +45,7 @@
 </p>
 
 
-
+---
 
 
 **4. Modifica el campo texto de las entradas donde el campo entero es menor a 30 y establece el texto como "Modificado".**
@@ -55,7 +55,7 @@
 </p>
 
 
-
+---
 
 **5. Elimina las entradas donde el campo entero es igual a 50.**
 
@@ -65,7 +65,7 @@
 </p>
 
 
-
+---
 
 
 **6.Incrementa en 10 el valor del campo entero para las entradas donde el campo booleano es igual a False.**
@@ -78,7 +78,7 @@
 
 
 
-
+---
 
 
 **7. Elimina las entradas donde el campo decimal es menor a 50.**
@@ -89,7 +89,7 @@
 </p>
 
 
-
+---
 
 **8. Actualiza el campo fecha de todas las entradas a la fecha actual.**
 
@@ -97,10 +97,6 @@
 <p align="center">
   <img width="" height="250" src="img/actualiza a la fecha actual.png">
 </p>
-
-
-
-
 
 
 
