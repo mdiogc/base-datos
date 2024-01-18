@@ -2,6 +2,11 @@
 
 # Tarea 4 sobre sqlite3 funciones de base de datos
 
+<p align="center">
+  <img width="" height="200" src="https://logowik.com/content/uploads/images/sqlite1911.jpg">
+</p>
+
+
 **Responde a las siguientes cuestiones**
 
 
@@ -200,11 +205,28 @@ select nombre, precio from productos where precio <= 2;
 12. Calcular la cantidad total de ventas para cada fecha.
 
 ```sql
-
+select fecha, sum(cantidad) as suma_total from ventas group by fecha;
+┌────────────┬────────────┐
+│   fecha    │ suma_total │
+├────────────┼────────────┤
+│ 2024-01-17 │ 11         │
+│ 2024-01-18 │ 16         │
+│ 2024-01-19 │ 10         │
+│ 2024-01-20 │ 6          │
+└────────────┴────────────┘
 ```
 13. Listar los productos cuyo nombre comienza con la letra 'P'.
 ```sql
-
+select substr(nombre, 1) as inicial from productos where nombre like '%p%';
+┌────────────────────┐
+│      inicial       │
+├────────────────────┤
+│ Pan                │
+│ Pollo              │
+│ Papel Higiénico    │
+│ Cepillo de Dientes │
+│ Sopa enlatada      │
+└────────────────────┘
 ```
 
 14. Obtener el producto más vendido en términos de cantidad.
