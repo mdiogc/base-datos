@@ -301,54 +301,259 @@ select nombre as nombre_producto, categoria from productos order by categoria;
 ```
 18. Listar los productos y sus categorías ordenados alfabéticamente por categoría.
 ```sql
-
+select
+    nombre as nombre_producto,
+    categoria
+from
+    productos
+order by
+    categoria;
+┌────────────────────┬───────────┐
+│  nombre_producto   │ categoria │
+├────────────────────┼───────────┤
+│ Arroz              │ Alimentos │
+│ Café               │ Bebidas   │
+│ Botellas de Agua   │ Bebidas   │
+│ Cerveza            │ Bebidas   │
+│ Pollo              │ Carnes    │
+│ Aceite de Oliva    │ Cocina    │
+│ Sopa enlatada      │ Conservas │
+│ Cereal             │ Desayuno  │
+│ Manzanas           │ Frutas    │
+│ Cepillo de Dientes │ Higiene   │
+│ Jabón de Baño      │ Higiene   │
+│ Papel Higiénico    │ Hogar     │
+│ Detergente         │ Limpieza  │
+│ Leche              │ Lácteos   │
+│ Huevos             │ Lácteos   │
+│ Yogurt             │ Lácteos   │
+│ Queso              │ Lácteos   │
+│ Pan                │ Panadería │
+│ Galletas           │ Snacks    │
+│ Tomates            │ Verduras  │
+└────────────────────┴───────────┘
 ```
 19. Calcular el precio total de los productos vendidos en la fecha '2024-01-19'.
 ```sql
-
+select
+    sum(precio * cantidad) as precio_total
+from
+    productos p
+join
+    ventas v on p.id = v.id_producto
+where
+    v.fecha = '2024-01-19';
+┌──────────────┐
+│ precio_total │
+├──────────────┤
+│ 26.9         │
+└──────────────┘
 ```
 20. Mostrar los productos que no pertenecen a la categoría "Higiene".
 ```sql
-
+select
+    nombre as nombre_producto,
+    categoria
+from
+    productos
+where
+    categoria != 'Higiene';
+┌──────────────────┬───────────┐
+│ nombre_producto  │ categoria │
+├──────────────────┼───────────┤
+│ Arroz            │ Alimentos │
+│ Leche            │ Lácteos   │
+│ Pan              │ Panadería │
+│ Manzanas         │ Frutas    │
+│ Pollo            │ Carnes    │
+│ Huevos           │ Lácteos   │
+│ Yogurt           │ Lácteos   │
+│ Tomates          │ Verduras  │
+│ Queso            │ Lácteos   │
+│ Cereal           │ Desayuno  │
+│ Papel Higiénico  │ Hogar     │
+│ Detergente       │ Limpieza  │
+│ Galletas         │ Snacks    │
+│ Aceite de Oliva  │ Cocina    │
+│ Café             │ Bebidas   │
+│ Sopa enlatada    │ Conservas │
+│ Botellas de Agua │ Bebidas   │
+│ Cerveza          │ Bebidas   │
+└──────────────────┴───────────┘
 ```
 21. Encontrar la cantidad total de productos en cada categoría.
 ```sql
-
+select
+    categoria,
+    count(*) as cantidad_total
+from
+    productos
+group by
+    categoria;
+┌───────────┬────────────────┐
+│ categoria │ cantidad_total │
+├───────────┼────────────────┤
+│ Alimentos │ 1              │
+│ Bebidas   │ 3              │
+│ Carnes    │ 1              │
+│ Cocina    │ 1              │
+│ Conservas │ 1              │
+│ Desayuno  │ 1              │
+│ Frutas    │ 1              │
+│ Higiene   │ 2              │
+│ Hogar     │ 1              │
+│ Limpieza  │ 1              │
+│ Lácteos   │ 4              │
+│ Panadería │ 1              │
+│ Snacks    │ 1              │
+│ Verduras  │ 1              │
+└───────────┴────────────────┘
 ```
 22. Listar los productos que tienen un precio igual a la media de precios.
 
 ```sql
-
+select
+    nombre as nombre_producto,
+    precio
+from
+    productos
+where
+    precio = (select avg(precio) from productos);
 ```
 
 23. Calcular el precio total de los productos vendidos en cada fecha.
 
 ```sql
-
+ select
+    fecha,
+    sum(precio * cantidad) as precio_total
+from
+    productos p
+join
+    ventas v on p.id = v.id_producto
+group by
+    fecha;
+┌────────────┬──────────────┐
+│   fecha    │ precio_total │
+├────────────┼──────────────┤
+│ 2024-01-17 │ 29.4         │
+│ 2024-01-18 │ 25.8         │
+│ 2024-01-19 │ 26.9         │
+│ 2024-01-20 │ 7.2          │
+└────────────┴──────────────┘
 ```
 24. Mostrar los productos con un nombre que termina con la letra 'o'.
 ```sql
-
+ select
+    nombre as nombre_producto
+from
+    productos
+where
+    nombre like '%o';
+┌─────────────────┐
+│ nombre_producto │
+├─────────────────┤
+│ Pollo           │
+│ Queso           │
+│ Papel Higiénico │
+│ Jabón de Baño   │
+└─────────────────┘
 ```
 25. Encontrar los productos que han sido vendidos en más de una fecha.
 ```sql
-
+select
+    nombre as nombre_producto
+from
+    productos p
+join
+    ventas v on p.id = v.id_producto
+group by
+    p.id, p.nombre
+having
+    count(distinct v.fecha) > 1;
+sqlite> 
 ```
 26. Listar los productos cuya categoría comienza con la letra 'L'.
 ```sql
-
+select
+    nombre as nombre_producto,
+    categoria
+from
+    productos
+where
+    categoria like 'L%';
+┌─────────────────┬───────────┐
+│ nombre_producto │ categoria │
+├─────────────────┼───────────┤
+│ Leche           │ Lácteos   │
+│ Huevos          │ Lácteos   │
+│ Yogurt          │ Lácteos   │
+│ Queso           │ Lácteos   │
+│ Detergente      │ Limpieza  │
+└─────────────────┴───────────┘
 ```
 27. Calcular el total de ventas para cada producto en la fecha '2024-01-17'.
 ```sql
-
+select
+    p.nombre as nombre_producto,
+    sum(v.cantidad) as total_vendido
+from
+    productos p
+join
+    ventas v on p.id = v.id_producto
+where
+    v.fecha = '2024-01-17'
+group by
+    p.id, p.nombre;
+┌─────────────────┬───────────────┐
+│ nombre_producto │ total_vendido │
+├─────────────────┼───────────────┤
+│ Arroz           │ 5             │
+│ Leche           │ 3             │
+│ Manzanas        │ 2             │
+│ Pollo           │ 1             │
+└─────────────────┴───────────────┘
 ```
 28. Mostrar los productos cuyo nombre tiene al menos 5 caracteres.
 ```sql
-
+select
+    nombre as nombre_producto
+from
+    productos
+where
+    length(nombre) >= 5;
+┌────────────────────┐
+│  nombre_producto   │
+├────────────────────┤
+│ Arroz              │
+│ Leche              │
+│ Manzanas           │
+│ Pollo              │
+│ Huevos             │
+│ Yogurt             │
+│ Tomates            │
+│ Queso              │
+│ Cereal             │
+│ Papel Higiénico    │
+│ Cepillo de Dientes │
+│ Detergente         │
+│ Galletas           │
+│ Aceite de Oliva    │
+│ Sopa enlatada      │
+│ Jabón de Baño      │
+│ Botellas de Agua   │
+│ Cerveza            │
+└────────────────────┘
 ```
 29. Encontrar los productos que tienen un precio superior al precio máximo en la tabla "productos".
 ```sql
-
+select
+    nombre as nombre_producto,
+    precio
+from
+    productos
+where
+    precio > (select max(precio) from productos);
 ```
 
 
