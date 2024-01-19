@@ -555,8 +555,13 @@ from
 where
     precio > (select max(precio) from productos);
 ```
+</div>
 
 
 
+<div align="justify";>
+
+
+![Ejercicio Entidad-Relacion](img/productos-ventas.drawio.png)
 
 </div>
