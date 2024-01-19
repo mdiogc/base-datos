@@ -232,18 +232,71 @@ select substr(nombre, 1) as inicial from productos where nombre like '%p%';
 14. Obtener el producto más vendido en términos de cantidad.
 
 ```sql
-
+select p.nombre as nombre_producto,sum (v.cantidad) as total_vendido
+from productos p join ventas v on p.id = v.id_producto group by p.id, p.nombre order by total_vendido desc limit 1;
+┌─────────────────┬───────────────┐
+│ nombre_producto │ total_vendido │
+├─────────────────┼───────────────┤
+│ Huevos          │ 10            │
+└─────────────────┴───────────────┘
 ```
 15. Mostrar los productos que fueron vendidos en la fecha '2024-01-18'.
 ```sql
-
+ select p.id, p.nombre as nombre_producto, v.cantidad, v.fecha from productos p join ventas v on p.id = v.id_producto where v.fecha = '2024-01-18';
+┌────┬─────────────────┬──────────┬────────────┐
+│ id │ nombre_producto │ cantidad │   fecha    │
+├────┼─────────────────┼──────────┼────────────┤
+│ 6  │ Huevos          │ 10       │ 2024-01-18 │
+│ 8  │ Tomates         │ 4        │ 2024-01-18 │
+│ 10 │ Cereal          │ 2        │ 2024-01-18 │
+└────┴─────────────────┴──────────┴────────────┘
 ```
 16. Calcular el total de ventas para cada producto.
 ```sql
+select p.id as id_producto, p.nombre as nombre_producto,sum(v.cantidad) as total_vendido from productos p join ventas v on p.id = v.id_producto group by id_producto, p.nombre;
 
+┌─────────────┬─────────────────┬───────────────┐
+│ id_producto │ nombre_producto │ total_vendido │
+├─────────────┼─────────────────┼───────────────┤
+│ 1           │ Arroz           │ 5             │
+│ 2           │ Leche           │ 3             │
+│ 4           │ Manzanas        │ 2             │
+│ 5           │ Pollo           │ 1             │
+│ 6           │ Huevos          │ 10            │
+│ 8           │ Tomates         │ 4             │
+│ 10          │ Cereal          │ 2             │
+│ 14          │ Galletas        │ 7             │
+│ 16          │ Café            │ 3             │
+│ 18          │ Jabón de Baño   │ 6             │
+└─────────────┴─────────────────┴───────────────┘
 ```
 17. Encontrar los productos con un precio entre 3 y 4.
 ```sql
+select nombre as nombre_producto, categoria from productos order by categoria;
+┌────────────────────┬───────────┐
+│  nombre_producto   │ categoria │
+├────────────────────┼───────────┤
+│ Arroz              │ Alimentos │
+│ Café               │ Bebidas   │
+│ Botellas de Agua   │ Bebidas   │
+│ Cerveza            │ Bebidas   │
+│ Pollo              │ Carnes    │
+│ Aceite de Oliva    │ Cocina    │
+│ Sopa enlatada      │ Conservas │
+│ Cereal             │ Desayuno  │
+│ Manzanas           │ Frutas    │
+│ Cepillo de Dientes │ Higiene   │
+│ Jabón de Baño      │ Higiene   │
+│ Papel Higiénico    │ Hogar     │
+│ Detergente         │ Limpieza  │
+│ Leche              │ Lácteos   │
+│ Huevos             │ Lácteos   │
+│ Yogurt             │ Lácteos   │
+│ Queso              │ Lácteos   │
+│ Pan                │ Panadería │
+│ Galletas           │ Snacks    │
+│ Tomates            │ Verduras  │
+└────────────────────┴───────────┘
 
 ```
 18. Listar los productos y sus categorías ordenados alfabéticamente por categoría.
