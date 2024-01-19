@@ -14,9 +14,8 @@
 2. Realiza el diagrama MR de la BBDD supermercado.
 3. Indica si la BBDD esta normalizada hasta la 3ª forma normal, justificando la respuesta.
 
-Paso 4: Responde a las siguientes cuestiones
 
-Realiza las siguientes consultas, y muestra el resultado obtenido:
+### Realiza las siguientes consultas, y muestra el resultado obtenido:
 
 1. Mostrar todos los productos de la categoría "Bebidas".
 ```sql
@@ -561,7 +560,46 @@ where
 
 <div align="justify";>
 
+### El modelo entidad relación y modelo relacional
 
 ![Ejercicio Entidad-Relacion](img/productos-ventas.drawio.png)
 
+> como podemos observar la cardinalidad entre productos-venta es de 1:N. Siendo 'Ventas' quien recibirá la clave foránea **(FK)** 
+
 </div>
+
+
+### Normalización
+
+#### Primera Forma Normal (1FN):
+- Cada atributo contiene un solo valor, y no hay grupos repetitivos de atributos.
+
+- Ya cumple con 1FN, ya que cada celda de la tabla contiene un solo valor y no hay conjuntos repetitivos de atributos.
+#### Segunda Forma Normal (2FN):
+- Está en 1FN, y todos los atributos no clave son completamente dependientes de la clave primaria.
+
+- Cumple con 2FN si asumimos que "id_producto" es una clave compuesta de "Ventas".
+
+
+#### Tercera Forma Normal (3FN):
+- Está en 2FN, y no hay dependencias transitivas.
+
+- Podría haber una dependencia transitiva entre "nombre" y "categoria" en "Productos". Para 3FN, podríamos crear una tabla separada para "Categorías".
+Esquema propuesto después de la tercera normalización:
+
+|Productos         |   
+|-------------------|        
+| id (PK)           |        
+| nombre            |         
+| id_categoria (FK) |
+| precio            | 
+
+| id (PK)           | 
+|-------------------| 
+| id_producto (FK)  | 
+| cantidad          | 
+| fecha             | 
+
+| id (PK)           | 
+|-------------------| 
+| categoria         | 
