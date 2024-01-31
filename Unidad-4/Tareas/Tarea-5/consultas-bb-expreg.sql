@@ -1,8 +1,14 @@
 -- Selección de libros cuyo título comienza con "H".
+select titulo from libro where titulo regexp '^H';
 
+/***
+No hay titulo que empiece con H
+***/
 
 
 -- Libros escritos por autores cuyos nombres terminan con "ing".
+
+
 
 -- Libros con títulos que contienen la palabra "and" en cualquier posición.
 
