@@ -7,14 +7,72 @@ No hay titulo que empiece con H
 
 
 -- Libros escritos por autores cuyos nombres terminan con "ing".
+select nombre from libro inner join autor where nombre regexp 'ing$';
 
-
-
-
-
-
-
-
+/**
+┌──────────────┐
+│    nombre    │
+├──────────────┤
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ J.K. Rowling │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+│ Stephen King │
+└──────────────┘
+**/
 
 
 
@@ -300,53 +358,73 @@ select nombre from autor where nombre regexp '^[AEIOU]';
 
 
 -- Seleccionar los libros cuyo título termina con una vocal:
-
-
-
-
-
-
-
+select titulo from libro where titulo regexp '[aeiouAEIOU]$';
+/**
+┌───────────────────────────────┐
+│            titulo             │
+├───────────────────────────────┤
+│ The Catcher in the Rye        │
+│ One Hundred Years of Solitude │
+│ The Chronicles of Narnia      │
+│ The Old Man and the Sea       │
+│ The Count of Monte Cristo     │
+│ The Prince                    │
+│ Don Quixote                   │
+│ Anna Karenina                 │
+│ War and Peace                 │
+└───────────────────────────────┘
+**/
 
 
 
 -- Obtener todos los autores cuyo nombre contiene la secuencia "er":
-
-
-
-
-
-
-
-
-
+select nombre from autor where nombre regexp 'er';
+/**
+Ningún autor contine la sequencia 'er'
+**/
 
 
 -- Seleccionar los libros cuyo título empieza con la palabra "The":
-
-
-
-
-
-
-
-
-
+ select titulo from libro where titulo regexp '^[The]';
+/**
+┌───────────────────────────────────┐
+│              titulo               │
+├───────────────────────────────────┤
+│ The Great Gatsby                  │
+│ To Kill a Mockingbird             │
+│ The Catcher in the Rye            │
+│ The Hobbit                        │
+│ The Lord of the Rings             │
+│ The Chronicles of Narnia          │
+│ The Odyssey                       │
+│ The Iliad                         │
+│ The Road                          │
+│ The Grapes of Wrath               │
+│ The Old Man and the Sea           │
+│ The Count of Monte Cristo         │
+│ The Picture of Dorian Gray        │
+│ The Adventures of Sherlock Holmes │
+│ The Prince                        │
+│ The Divine Comedy                 │
+│ The Jungle Book                   │
+│ The Wind in the Willows           │
+└───────────────────────────────────┘
+**/
 
 
 -- Obtener todos los autores cuyo nombre tiene al menos una letra mayúscula:
-
-
-
-
-
-
-
-
-
-
-
-
+select nombre from autor where nombre regexp '[A-Z]{1,}';
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ J.K. Rowling    │
+│ Stephen King    │
+│ George Orwell   │
+│ Jane Austen     │
+│ Agatha Christie │
+└─────────────────┘
+**/
 
 -- Seleccionar los libros cuyo precio es un número decimal con exactamente dos decimales:
 
@@ -361,16 +439,11 @@ select nombre from autor where nombre regexp '^[AEIOU]';
 
 
 -- Obtener todos los autores cuyo nombre no contiene números:
+select nombre from autor where nombre regexp not '\D';
 
-
-
-
-
-
-
-
-
-
+/**
+Ningún nombe de los autores contiene un número
+**/
 
 -- Seleccionar los libros cuyo título contiene al menos tres vocales:
 
@@ -397,15 +470,11 @@ select nombre from autor where nombre regexp '^[AEIOU]';
 
 
 -- Seleccionar los libros cuyo título no contiene la palabra "Science":
+ select titulo from libro where titulo regexp not 'Science';
 
-
-
-
-
-
-
-
-
+/**
+Ningún titulo contiene la palabra "Science"
+**/
 
 
 
@@ -424,16 +493,11 @@ select nombre from autor where nombre regexp '^[AEIOU]';
 
 
 -- Obtener todos los autores cuyo nombre empieza con "M" o termina con "n":
+select nombre from autor where nombre regexp '^M' or 'n$';
 
-
-
-
-
-
-
-
-
-
+/**
+Ningún autor  empieza con "M" o termina con "n"
+**/
 
 
 
