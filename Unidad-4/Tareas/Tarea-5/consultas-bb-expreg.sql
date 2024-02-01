@@ -7,73 +7,9 @@ No hay titulo que empiece con H
 
 
 -- Libros escritos por autores cuyos nombres terminan con "ing".
-select nombre from libro inner join autor where nombre regexp 'ing$';
-
-/**
-┌──────────────┐
-│    nombre    │
-├──────────────┤
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ J.K. Rowling │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-│ Stephen King │
-└──────────────┘
-**/
-
+select libro.titulo, autor.nombre as nombre_autor
+from libro join autor on libro.autor_id = autor.id_autor
+where autor.nombre regexp 'ing$';
 
 
 
@@ -106,36 +42,28 @@ select titulo from libro where titulo regexp '^[aeiouAEIOU]';
 
 -- Libros cuyo autor tiene al menos una vocal repetida.
 
+SELECT libro.titulo, autor.nombre AS nombre_autor
+FROM libro, autor
+WHERE libro.autor_id = autor.id_autor
+      AND autor.nombre REGEXP '([aeiouAEIOU]).*\\1';
 
 
 
 
 -- Libros con precios que tienen dos dígitos decimales exactos.
 
-
-
-
-
-
-
+SELECT titulo, precio
+FROM libro
+WHERE precio REGEXP '\\.[0-9]{2}$';
 
 
 
 
 -- Libros cuyos títulos tienen al menos tres palabras.
 
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT titulo
+FROM libro
+WHERE titulo REGEXP '\\b\\w+\\b(\\s\\b\\w+\\b){2,}';
 
 
 -- Obtener todos los autores cuyo nombre empieza con la letra "A":
@@ -345,14 +273,9 @@ select nombre from autor where nombre regexp '^[AEIOU]';
 
 -- Obtener todos los autores cuyo nombre no contiene espacios en blanco:
 
-
-
-
-
-
-
-
-
+select nombre
+from autor
+where nombre not regexp ' ';
 
 
 
@@ -427,12 +350,9 @@ select nombre from autor where nombre regexp '[A-Z]{1,}';
 **/
 
 -- Seleccionar los libros cuyo precio es un número decimal con exactamente dos decimales:
-
-
-
-
-
-
+SELECT titulo, precio
+FROM libro
+WHERE precio REGEXP '^[0-9]+\\.[0-9]{2}$';
 
 
 
@@ -447,23 +367,18 @@ Ningún nombe de los autores contiene un número
 
 -- Seleccionar los libros cuyo título contiene al menos tres vocales:
 
-
-
-
-
-
+SELECT titulo
+FROM libro
+WHERE titulo REGEXP '[aeiouAEIOU].*[aeiouAEIOU].*[aeiouAEIOU]';
 
 
 
 
 -- Obtener todos los autores cuyo nombre inicia con una consonante:
 
-
-
-
-
-
-
+SELECT nombre
+FROM autor
+WHERE nombre REGEXP '^[^aeiouAEIOU]';
 
 
 
@@ -481,13 +396,9 @@ Ningún titulo contiene la palabra "Science"
 -- Obtener todos los autores cuyo nombre tiene al menos una letra repetida consecutivamente:
 
 
-
-
-
-
-
-
-
+SELECT nombre
+FROM autor
+WHERE nombre REGEXP '(\\w)\\1';
 
 
 
@@ -503,3 +414,9 @@ Ningún autor  empieza con "M" o termina con "n"
 
 
 -- Obtener todos los autores cuyo nombre no contiene caracteres especiales:
+
+SELECT nombre
+FROM autor
+WHERE nombre REGEXP '^[a-zA-Z0-9 ]+$';
+
+
