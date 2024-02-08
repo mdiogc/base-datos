@@ -158,6 +158,7 @@ select invoices.total, customers.FirstName, customers.Country
 **/
 --¿Cuántas facturas hubo en 2009 y 2011? ¿Cuáles son las ventas totales respectivas para cada uno de esos años?
 
+
 /**
 
 **/
