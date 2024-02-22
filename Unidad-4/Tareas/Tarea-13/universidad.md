@@ -7,15 +7,34 @@
 
 1. Devuelve un listado con el primer apellido, segundo apellido y el nombre de todos los alumnos. El listado deberá estar ordenado alfabéticamente de menor a mayor por el primer apellido, segundo apellido y nombre.
 ```sql
-
+select apellido1, apellido2, nombre from persona order by apellido1, apellido2, nombre;
 ```
 
 2. Averigua el nombre y los dos apellidos de los alumnos que no han dado de alta su número de teléfono en la base de datos.
 ```sql
-
+select nombre, apellido1, apellido2 from persona where telefono is null;
+┌───────────┬────────────┬───────────┐
+│  nombre   │ apellido1  │ apellido2 │
+├───────────┼────────────┼───────────┤
+│ Pedro     │ Heller     │ Pagac     │
+│ Ismael    │ Strosin    │ Turcotte  │
+│ Esther    │ Spencer    │ Lakin     │
+│ Carmen    │ Streich    │ Hirthe    │
+│ Antonio   │ Fahey      │ Considine │
+│ Guillermo │ Ruecker    │ Upton     │
+│ Francesca │ Schowalter │ Muller    │
+└───────────┴────────────┴───────────┘
 ```
 3. Devuelve el listado de los alumnos que nacieron en 1999.
 ```sql
+select * from persona where fecha_nacimiento regexp  '1999';
+
+┌────┬───────────┬─────────┬───────────┬───────────┬─────────┬─────────────────┬───────────┬──────────────────┬──────┬────────┐
+│ id │    nif    │ nombre  │ apellido1 │ apellido2 │ ciudad  │    direccion    │ telefono  │ fecha_nacimiento │ sexo │  tipo  │
+├────┼───────────┼─────────┼───────────┼───────────┼─────────┼─────────────────┼───────────┼──────────────────┼──────┼────────┤
+│ 7  │ 97258166K │ Ismael  │ Strosin   │ Turcotte  │ Almería │ C/ Neptuno      │           │ 1999/05/24       │ H    │ alumno │
+│ 22 │ 41491230N │ Antonio │ Domínguez │ Guerrero  │ Almería │ C/ Cabo de Gata │ 626652498 │ 1999/02/11       │ H    │ alumno │
+└────┴───────────┴─────────┴───────────┴───────────┴─────────┴─────────────────┴───────────┴──────────────────┴──────┴────────┘
 
 ```
 4. Devuelve el listado de profesores que no han dado de alta su número de teléfono en la base de datos y además su nif termina en K.
