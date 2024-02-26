@@ -162,14 +162,10 @@ select * from asignatura join grado on grado.id = asignatura.id_grado where grad
 │ 50 │ Procesos de Ingeniería del Software 2                                  │ 6.0      │ optativa    │ 4     │ 2            │             │ 4        │ 4  │ Grado en Ingeniería Informática (Plan 2015) │
 │ 51 │ Seguridad Informática                                                  │ 6.0      │ optativa    │ 4     │ 2            │             │ 4        │ 4  │ Grado en Ingeniería Informática (Plan 2015) │
 └────┴────────────────────────────────────────────────────────────────────────┴──────────┴─────────────┴───────┴──────────────┴─────────────┴──────────┴────┴─────────────────────────────────────────────┘
-
-
-
-
 ```
 3. Devuelve un listado de los profesores junto con el nombre del departamento al que están vinculados. El listado debe devolver cuatro columnas, primer apellido, segundo apellido, nombre y nombre del departamento. El resultado estará ordenado alfabéticamente de menor a mayor por los apellidos y el nombre.
 ```sql
-
+select persona.nombre, apellido1, apellido2, departamento.id, departamento.nombre from persona, departamento join profesor on persona.id = profesor.id_profesor join departamento on departamento.id = profesor.id_departamento order by apellido1, apellido2, persona.nombre;
 ```
 4. Devuelve un listado con el nombre de las asignaturas, año de inicio y año de fin del curso escolar del alumno con nif 26902806M.
 ```sql
