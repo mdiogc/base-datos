@@ -98,6 +98,7 @@ select nombre, cuatrimestre, id_grado from asignatura where cuatrimestre = '1' a
 │ Técnicas instrumentales básicas           │ 1            │ 7        │
 └───────────────────────────────────────────┴──────────────┴──────────┘
 ```
+```sql
 -- Devuelve un listado con los datos de todas las alumnas que se han matriculado alguna vez en el Grado en Ingeniería Informática (Plan 2015).
 select p.* from persona as p 
 JOIN alumno_se_matricula_asignatura as asma ON p.id=asma.id_alumno
@@ -805,7 +806,7 @@ WHERE d.id NOT IN (
 │ 9  │ Biología y Geología │
 └────┴─────────────────────┘
 **/
-
+```
 
 
 
