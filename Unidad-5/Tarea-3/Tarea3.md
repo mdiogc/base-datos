@@ -41,6 +41,14 @@ select * from productos;
 ```
 - Mostrar todos los detalles de las órdenes.
 ```sql
+select * from detalles_ordenes;
++------------+----------+-------------+----------+
+| id_detalle | id_orden | id_producto | cantidad |
++------------+----------+-------------+----------+
+|          1 |        1 |           1 |        2 |
+|          2 |        2 |           2 |        1 |
+|          3 |        3 |           3 |        3 |
++------------+----------+-------------+----------+
 
 ```
 - Mostrar los primeros 5 clientes ordenados por nombre.
@@ -83,6 +91,12 @@ select * from clientes where nombre_cliente regexp '^A';
 ```
 - Mostrar las órdenes que contienen más de 2 productos.
 ```sql
+select * from detalles_ordenes where cantidad > 2;
++------------+----------+-------------+----------+
+| id_detalle | id_orden | id_producto | cantidad |
++------------+----------+-------------+----------+
+|          3 |        3 |           3 |        3 |
++------------+----------+-------------+----------+
 
 ```
 - Mostrar los productos ordenados por precio de forma descendente.
@@ -110,12 +124,19 @@ select c.*, o.* from clientes as c right join ordenes as o on c.id_cliente= o.id
 ```
 - Seleccionar todas las órdenes junto con los productos correspondientes.
 ```sql
-select o.*, p.nombre_producto, p.precio_producto from ordenes as o join productos as p on o.id_producto =
+select do.*, p.nombre_producto, p.precio_producto from detalles_ordenes as do join productos as p on do.id_producto = p.id_producto;
++------------+----------+-------------+----------+-----------------+-----------------+
+| id_detalle | id_orden | id_producto | cantidad | nombre_producto | precio_producto |
++------------+----------+-------------+----------+-----------------+-----------------+
+|          1 |        1 |           1 |        2 | Producto A      |           50.00 |
+|          2 |        2 |           2 |        1 | Producto B      |           75.00 |
+|          3 |        3 |           3 |        3 | Producto C      |          100.00 |
++------------+----------+-------------+----------+-----------------+-----------------+
 
 ```
 - Mostrar el nombre de los clientes que han realizado órdenes de productos que cuestan más de 50.
 ```sql
-select c.nombre_cliente from clientes as c inner join ordenes as o on c.id_cliente = o.id_cliente inner join productos as p on o.id_producto = p.id_producto where p.precio_producto > 50;
+select c.nombre_clientes from clientes as c join detalles_ordenes as do on c.id_cliente = ord.id_cliente join productos as p on 
 
 ```
 - Obtener el nombre de los productos que no se han ordenado aún.
