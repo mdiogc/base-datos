@@ -136,7 +136,9 @@ select do.*, p.nombre_producto, p.precio_producto from detalles_ordenes as do jo
 ```
 - Mostrar el nombre de los clientes que han realizado órdenes de productos que cuestan más de 50.
 ```sql
-select c.nombre_clientes from clientes as c join detalles_ordenes as do on c.id_cliente = ord.id_cliente join productos as p on 
+select c.nombre_clientes from clientes
+as c join detalles_ordenes as do on c.id_cliente = ord.id_cliente
+join productos as p on 
 
 ```
 - Obtener el nombre de los productos que no se han ordenado aún.
