@@ -31,7 +31,7 @@ Podemos hacer varias observaciones al respecto:
 - En MySql debemos crear una ```database``` y luego ```use```  junto al nombre de esta, para poder usarla y operar con ella.
 - la ```primary key``` en el formato MySql deberá ponerse ```auto_increment```, en vez de ```integer``` será ```int```.
 - Es opcional, pero sigue siendo importante usar en vez de ```text```el comando ```varchar``` junto a sus paréntisis donde se señalará entre 50 y 255 números de carácteres.
-- Los ```insert into``` y ```values``` seguiran siendo los mismos y operando de la misma manera.
+- Los ```insert into``` y ```values``` seguirán siendo los mismos.
 
 
 
