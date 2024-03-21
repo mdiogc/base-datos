@@ -121,7 +121,7 @@ WHERE p.id IS NULL;
 ```
 > **_NOTE:_**
 > La diferencia radica en qué tabla se toma como referencia para garantizar la inclusión de todas sus filas en el resultado. Con LEFT JOIN, es la tabla de la izquierda, y con RIGHT JOIN, es la tabla de la derecha. El efecto final en el resultado es similar, pero varía en términos de qué tabla se considera la principal y cuál se considera la secundaria en la operación de unión.
-
+### Con RIGHT JOIN
 - Obtener información de todos los departamentos y los empleados asociados, si los tienen:
 ```sql
 SELECT d.*, e.*
