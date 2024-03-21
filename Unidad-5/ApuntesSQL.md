@@ -143,6 +143,23 @@ RIGHT JOIN empleados e ON d.id = e.departamento_id
 WHERE d.id IS NULL;
 ```
 
+### Con FULL JOIN
+Devuelve todas las filas cuando hay una coincidencia en una de las tablas. Si no hay coincidencia, se devuelven NULLs en la columna correspondiente.
+
+- Obtener información de todos los empleados y sus departamentos asociados, si los tienen:
+```sql
+SELECT e.*, d.*
+FROM empleados e
+FULL JOIN departamentos d ON e.departamento_id = d.id;
+```
+
+- Obtener información de los empleados y los departamentos que no tienen coincidencias:
+```sql
+SELECT e.*, d.*
+FROM empleados e
+FULL JOIN departamentos d ON e.departamento_id = d.id
+WHERE e.id IS NULL OR d.id IS NULL;
+```
 
 
 
