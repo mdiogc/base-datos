@@ -70,7 +70,33 @@ select * from usuarios where nombre regexp 'a';
 ```sql
 select * from productos where precio between 20 and 50;
 ```
+También se pueden mostrar un número limitado de datos con el comando ```limit``` Ejemplo: Muestra los primeros 5 clientes ordenados por nombre.
+```sql
+select * from clientes order by nombre limit 5;
+```
 
+## Consultas con join
+### Con INNER JOIN o JOIN
+El INNER JOIN devuelve únicamente las filas que tienen al menos una coincidencia en ambas tablas, es decir, que cumplan con la condición de unión especificada.
+- Obtener información del usuario y sus pedidos asociados:
+```sql
+select u.*, p.*
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id;
+```
+- Obtener el nombre del usuario y la fecha de sus pedidos:
+```sql
+select u.nombre, p.fecha
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id;
+```
+- Obtener el número total de pedidos realizados por cada usuario:
+```sql
+select u.nombre, count(p.id) as total_pedidos
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id
+group by u.nombre;
+```
 
 
 
