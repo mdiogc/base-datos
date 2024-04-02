@@ -70,10 +70,97 @@ select * from usuarios where nombre regexp 'a';
 ```sql
 select * from productos where precio between 20 and 50;
 ```
+--------------------------------
+También se pueden mostrar un número limitado de datos con el comando ```limit``` Ejemplo: Muestra los primeros 5 clientes ordenados por nombre.
+```sql
+select * from clientes order by nombre limit 5;
+```
 
+## Consultas con join
+### Con INNER JOIN o JOIN
+El INNER JOIN devuelve únicamente las filas que tienen al menos una coincidencia en ambas tablas, es decir, que cumplan con la condición de unión especificada.
+- Obtener información del usuario y sus pedidos asociados:
+```sql
+select u.*, p.*
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id;
+```
+- Obtener el nombre del usuario y la fecha de sus pedidos:
+```sql
+select u.nombre, p.fecha
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id;
+```
+- Obtener el número total de pedidos realizados por cada usuario:
+```sql
+select u.nombre, count(p.id) as total_pedidos
+from usuarios as u
+inner join pedidos as p on u.id = p.usuario_id
+group by u.nombre;
+```
+---------------
+### Con LEFT JOIN
+Devuelve todas las filas de la tabla de la izquierda y las filas coincidentes de la tabla de la derecha.
+- Obtener información de todos los clientes y sus pedidos asociados, si los tienen:
+```sql
+SELECT c.*, p.*
+FROM clientes as c
+LEFT JOIN pedidos as p ON c.id = p.cliente_id;
+```
+- Obtener el número total de pedidos realizados por cada cliente, incluso si no han realizado ningún pedido:
+```sql
+SELECT c.nombre, COUNT(p.id) AS total_pedidos
+FROM clientes as c
+LEFT JOIN pedidos as p ON c.id = p.cliente_id
+GROUP BY c.nombre;
+```
+- Obtener información de los clientes que no han realizado ningún pedido:
+```sql
+SELECT c.*
+FROM clientes as c
+LEFT JOIN pedidos as p ON c.id = p.cliente_id
+WHERE p.id IS NULL;
+```
+>[!NOTE]
+>
+> La diferencia radica en qué tabla se toma como referencia para garantizar la inclusión de todas sus filas en el resultado. Con LEFT JOIN, es la tabla de la izquierda, y con RIGHT JOIN, es la tabla de la derecha. El efecto final en el resultado es similar, pero varía en términos de qué tabla se considera la principal y cuál se considera la secundaria en la operación de unión.
 
+- Obtener información de todos los departamentos y los empleados asociados, si los tienen:
+```sql
+SELECT d.*, e.*
+FROM departamentos as d
+RIGHT JOIN empleados as e ON d.id = e.departamento_id;
+```
+- Obtener el número total de empleados asignados a cada departamento, incluso si un departamento no tiene empleados:
+```sql
+SELECT d.nombre AS departamento, COUNT(e.id) AS total_empleados
+FROM departamentos as d
+RIGHT JOIN empleados as e ON d.id = e.departamento_id
+GROUP BY d.nombre;
+```
+- Obtener información de los empleados que no están asignados a ningún departamento:
+```sql
+SELECT e.*
+FROM departamentos d
+RIGHT JOIN empleados e ON d.id = e.departamento_id
+WHERE d.id IS NULL;
+```
+---------------------
+### Con FULL JOIN
+Devuelve todas las filas cuando hay una coincidencia en una de las tablas. Si no hay coincidencia, se devuelven NULLs en la columna correspondiente.
 
+- Obtener información de todos los empleados y sus departamentos asociados, si los tienen:
+```sql
+SELECT e.*, d.*
+FROM empleados e
+FULL JOIN departamentos d ON e.departamento_id = d.id;
+```
 
-
-
+- Obtener información de los empleados y los departamentos que no tienen coincidencias:
+```sql
+SELECT e.*, d.*
+FROM empleados e
+FULL JOIN departamentos d ON e.departamento_id = d.id
+WHERE e.id IS NULL OR d.id IS NULL;
+```
 </div>
