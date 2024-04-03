@@ -27,18 +27,33 @@ Se pide:
 inscripción).
     >__Nota__:_Muestra el comando y la salida_. 
 
+
 ```sql
-CREATE TABLE alumno (
-    numero_inscripcion INT,
-    anio_inscripcion INT,
-    nombre VARCHAR(255),
-    documento VARCHAR(255),
-    domicilio VARCHAR(255),
-    ciudad VARCHAR(255),
-    provincia VARCHAR(255),
-    PRIMARY KEY (año_inscripcion, numero_inscripcion)
+create table alumno (
+    numero_inscripcion INT AUTO_INCREMENT,
+    año_inscripcion INT,
+    nombre VARCHAR(50),
+    documento VARCHAR(10),
+    domicilio VARCHAR(100),
+    ciudad VARCHAR(50),
+    provincia VARCHAR(50),
+    PRIMARY KEY(numero_inscripcion, año_inscripcion)
 );
+
++--------------------+--------------+------+-----+---------+----------------+
+| Field              | Type         | Null | Key | Default | Extra          |
++--------------------+--------------+------+-----+---------+----------------+
+| numero_inscripcion | int          | NO   | PRI | NULL    | auto_increment |
+| año_inscripcion    | int          | NO   | PRI | NULL    |                |
+| nombre             | varchar(50)  | YES  |     | NULL    |                |
+| documento          | varchar(10)  | YES  |     | NULL    |                |
+| domicilio          | varchar(100) | YES  |     | NULL    |                |
+| ciudad             | varchar(50)  | YES  |     | NULL    |                |
+| provincia          | varchar(50)  | YES  |     | NULL    |                |
++--------------------+--------------+------+-----+---------+----------------+
+
 ```
+
 - Define los siguientes indices:
    - Un índice único por el campo "documento" y un índice común por ciudad y provincia.
         >__Nota__:_Muestra el comando y la salida. Justifica el tipo de indice en un comentario_. 
@@ -50,16 +65,17 @@ CREATE TABLE alumno (
         >__Nota__:_Muestra el comando y la salida __"show index"___.
         ```sql
         SHOW INDEXES FROM alumno;
-        +------------+------------+---------------------+--------------+---------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-        | Table      | Non_unique | Key_name            | Seq_in_index | Column_name         | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
-        +------------+------------+---------------------+--------------+---------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-        | alumno     |          0 | PRIMARY             |            1 | ano_inscripcion     | A         |         100 |     NULL | NULL   |      | BTREE      |         |               |
-        | alumno     |          0 | PRIMARY             |            2 | num_inscripcion     | A         |         100 |     NULL | NULL   |      | BTREE      |         |               |
-        | alumno     |          1 | idx_documento       |            1 | documento           | A         |         100 |     NULL | NULL   |      | BTREE      |         |               |
-        | alumno     |          1 | idx_ciudad_prov     |            1 | ciudad              | A         |          10 |     NULL | NULL   |      | BTREE      |         |               |
-        | alumno     |          1 | idx_ciudad_prov     |            2 | provincia           | A         |          10 |     NULL | NULL   |      | BTREE      |         |               |
-        +------------+------------+---------------------+--------------+---------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-
+        
+        +--------+------------+--------------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+        | Table  | Non_unique | Key_name     | Seq_in_index | Column_name        | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
+        +--------+------------+--------------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+        | alumno |          0 | PRIMARY      |            1 | numero_inscripcion | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+        | alumno |          0 | PRIMARY      |            2 | año_inscripcion    | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+        | alumno |          0 | idx_doc      |            1 | documento          | A         |           0 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+        | alumno |          1 | idx_location |            1 | ciudad             | A         |           0 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+        | alumno |          1 | idx_location |            2 | provincia          | A         |           0 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+        +--------+------------+--------------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+        
         ```
 
 
@@ -97,7 +113,12 @@ CREATE TABLE alumno (
 
     ```sql
     DROP INDEX idx_documento, idx_ciudad_provincia ON alumno;
-
+    +--------+------------+----------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+    | Table  | Non_unique | Key_name | Seq_in_index | Column_name        | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
+    +--------+------------+----------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+    | alumno |          0 | PRIMARY  |            1 | numero_inscripcion | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+    | alumno |          0 | PRIMARY  |            2 | año_inscripcion    | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+    +--------+------------+----------+--------------+--------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
     Empty set (0.00 sec)
     ```
 </div>
