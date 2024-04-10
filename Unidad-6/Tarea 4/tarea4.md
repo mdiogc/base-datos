@@ -77,6 +77,31 @@ SELECT * from actor WHERE first_name REGEXP 'O';
 - Actores que contengan una O en su nombre y en una A en su apellido.
 ```sql
 SELECT * FROM actor where first_name REGEXP 'O' AND LAST_NAME REGEXP 'A';
+
++----------+------------+--------------+---------------------+
+| actor_id | first_name | last_name    | last_update         |
++----------+------------+--------------+---------------------+
+|        5 | JOHNNY     | LOLLOBRIGIDA | 2006-02-15 04:34:33 |
+|        9 | JOE        | SWANK        | 2006-02-15 04:34:33 |
+|       11 | ZERO       | CAGE         | 2006-02-15 04:34:33 |
+|       19 | BOB        | FAWCETT      | 2006-02-15 04:34:33 |
+|       28 | WOODY      | HOFFMAN      | 2006-02-15 04:34:33 |
+|       40 | JOHNNY     | CAGE         | 2006-02-15 04:34:33 |
+|       42 | TOM        | MIRANDA      | 2006-02-15 04:34:33 |
+|       63 | CAMERON    | WRAY         | 2006-02-15 04:34:33 |
+|       78 | GROUCHO    | SINATRA      | 2006-02-15 04:34:33 |
+|      114 | MORGAN     | MCDORMAND    | 2006-02-15 04:34:33 |
+|      115 | HARRISON   | BALE         | 2006-02-15 04:34:33 |
+|      137 | MORGAN     | WILLIAMS     | 2006-02-15 04:34:33 |
+|      172 | GROUCHO    | WILLIAMS     | 2006-02-15 04:34:33 |
+|      176 | JON        | CHASE        | 2006-02-15 04:34:33 |
+|      188 | ROCK       | DUKAKIS      | 2006-02-15 04:34:33 |
+|      192 | JOHN       | SUVARI       | 2006-02-15 04:34:33 |
++----------+------------+--------------+---------------------+
+16 rows in set (0,00 sec)
+
+
+
 ```
 - Actores que contengan dos O en su nombre y en una A en su apellido.
 ```sql
@@ -173,7 +198,7 @@ SELECT * FROM city where city REGEXP '^a';
 ```
 - Ciudades que acaban por s.
 ```sql
-SELECT * FROM city where city REGEXP 's$';
+mysql> SELECT * FROM city where city REGEXP 's$';
 +---------+----------------------------+------------+---------------------+
 | city_id | city                       | country_id | last_update         |
 +---------+----------------------------+------------+---------------------+
@@ -220,6 +245,7 @@ SELECT * FROM city where country_id = '61';
 |     115 | Chisinau |         61 | 2006-02-15 04:45:25 |
 +---------+----------+------------+---------------------+
 1 row in set (0,00 sec)
+
 ```
 - Ciudades del country Spain.
 ```sql
