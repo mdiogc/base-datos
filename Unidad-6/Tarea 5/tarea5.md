@@ -69,14 +69,35 @@
   FROM pago
   WHERE YEAR(fecha_pago) = 2008;
   ---
-  
+  explain SELECT AVG(total) FROM pago WHERE YEAR(fecha_pago) = 2008;
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    |  1 | SIMPLE      | pago  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   26 |   100.00 | Using where |
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    1 row in set, 1 warning (0,01 sec)
   ```
 
   ```sql
   SELECT AVG(total)
   FROM pago
   WHERE fecha_pago >= '2008-01-01' AND fecha_pago <= '2008-12-31';
+  ---
+  explain SELECT AVG(total) FROM pago WHERE fecha_pago >= '2008-01-01' AND fecha_pago <= '2008-12-31';
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    |  1 | SIMPLE      | pago  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   26 |    11.11 | Using where |
+    +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+    1 row in set, 1 warning (0,01 sec)
+
   ```
+
+     > Ambas consultas tienen un rendimiento similar, ya que ambas realizan un escaneo completo de la tabla. Sin embargo, si se desea mejorar la eficiencia en la segunda que es la más ineficiente se podría considerar la creación de un índice en la columna “fecha_pago” para acelerar la búsqueda de registros dentro del rango deseado.
+     Por ejemplo:
+     ```sql
+    CREATE INDEX idx_fecha_pago ON pago (fecha_pago);
+     ```
 
   >[Lectura recomendada sobre la función YEAR y el uso de índices](https://www.mysqltutorial.org/mysql-date-functions/mysql-year-function/)
 
@@ -87,6 +108,25 @@
   FROM cliente INNER JOIN pedido
   ON cliente.codigo_cliente = pedido.codigo_cliente
   WHERE cliente.nombre_cliente LIKE 'A%';
+  ---
+  explain SELECT * FROM cliente INNER JOIN pedido ON cliente.codigo_cliente = pedido.codigo_cliente WHERE cliente.nombre_cliente LIKE 'A%';
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    | id | select_type | table   | partitions | type | possible_keys  | key            | key_len | ref                               | rows | filtered | Extra       |
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    |  1 | SIMPLE      | cliente | NULL       | ALL  | PRIMARY        | NULL           | NULL    | NULL                              |   36 |    11.11 | Using where |
+    |  1 | SIMPLE      | pedido  | NULL       | ref  | codigo_cliente | codigo_cliente | 4       | jardineria.cliente.codigo_cliente |    1 |   100.00 | NULL        |
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    2 rows in set, 1 warning (0,00 sec)
+    --Para optimizar la consulta lo ideal sería:
+    explain SELECT * FROM cliente INNER JOIN pedido ON cliente.codigo_cliente = pedido.codigo_cliente where cliente.nombre_cliente regexp 'A$';
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    | id | select_type | table   | partitions | type | possible_keys  | key            | key_len | ref                               | rows | filtered | Extra       |
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    |  1 | SIMPLE      | cliente | NULL       | ALL  | PRIMARY        | NULL           | NULL    | NULL                              |   36 |   100.00 | Using where |
+    |  1 | SIMPLE      | pedido  | NULL       | ref  | codigo_cliente | codigo_cliente | 4       | jardineria.cliente.codigo_cliente |    1 |   100.00 | NULL        |
+    +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
+    2 rows in set, 1 warning (0,00 sec)
+
   ```
 
 - ¿Por qué no es posible optimizar el tiempo de ejecución de las siguientes consultas, incluso haciendo uso de índices?
@@ -102,6 +142,7 @@
   ON cliente.codigo_cliente = pedido.codigo_cliente
   WHERE cliente.nombre_cliente LIKE '%A';
   ```
+
 
 - Crea un índice de tipo FULLTEXT sobre las columnas nombre y descripcion de la tabla producto.
 
