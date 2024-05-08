@@ -124,12 +124,57 @@ Vamos a crear distintos procedimientos que harán uso de cursores. Vamos a ver u
 Teniendo este ejemplo como referencia, realiza:
 
 1. Escribe un procedimiento almacenado que aumente los salarios de todos los empleados en un 5%, pero excluya a aquellos cuyo salario sea superior a 3200. El procedimiento debe tener parámetros de entrada.
+```sql
+DELIMITER //
+
+CREATE PROCEDURE aumentar_salarios(IN salario_limite DECIMAL(10,2))
+BEGIN
+    UPDATE empleados
+    SET salario = salario * 1.05
+    WHERE salario <= salario_limite;
+END //
+
+DELIMITER ;
 
 
+```
+Para llamarlo:
+
+```sql
+CALL aumentar_salarios(3200);
+```
 
 2. Escribe un procedimiento almacenado que calcule el salario anual de cada empleado (asumiendo que trabajan todo el año) y lo imprima.
+```sql
+DELIMITER //
 
+CREATE PROCEDURE calcular_salario_anual()
+BEGIN
+    DECLARE empleado_id INT;
+    DECLARE empleado_nombre VARCHAR(255);
+    DECLARE empleado_salario DECIMAL(10,2);
+    DECLARE salario_anual DECIMAL(10,2);
 
+    DECLARE empleado_cursor CURSOR FOR
+        SELECT id, nombre, salario
+        FROM empleados;
+    OPEN empleado_cursor;
+
+    calcular_salario_anual_loop: LOOP
+        FETCH empleado_cursor INTO empleado_id, empleado_nombre, empleado_salario;
+        IF (empleado_id IS NULL) THEN
+            LEAVE calcular_salario_anual_loop;
+        END IF;
+
+        SET salario_anual = empleado_salario * 12;
+
+    END LOOP calcular_salario_anual_loop;
+
+    CLOSE empleado_cursor;
+END //
+
+DELIMITER ;
+```
 
 3. Escribe un procedimiento almacenado que cuente y muestre el número de empleados en cada rango de salario (por ejemplo, menos de 3000, entre 3000 y 5000, más de 5000). El procedimiento debe tener parámetros de entrada.
 
