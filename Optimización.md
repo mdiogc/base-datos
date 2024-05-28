@@ -1,286 +1,164 @@
-1. Habitaciones reservadas para el día 15 de marzo de 2023
-```sql
-SELECT * FROM ReservaHabitac WHERE fechaEntrada = '2023-03-15';
-```
-Resultado:
-```sql
-+-----------+--------------+-------------+------+---------------+---------+
-| idReserva | fechaEntrada | fechaSalida | iva  | numHabitacion | cliente |
-+-----------+--------------+-------------+------+---------------+---------+
-|         1 | 2023-03-15   | 2023-03-25  | 0.07 |           101 | 12345   |
-|         2 | 2023-03-15   | 2023-03-25  | 0.07 |           102 | 12345   |
-+-----------+--------------+-------------+------+---------------+---------+
-```
-2. Clientes procedentes de España y Francia
-```sql
-SELECT idCliente, pais FROM Cliente WHERE pais IN ('España', 'Francia');
-```
-3. Precios de los distintos tipos de habitación por temporada
-Aquí asumimos que tenemos las tablas PrecioHabitacion y Temporada:
+## Triggers (Disparadores)
+- ¿Qué es un Trigger?
 
-```sql
-SELECT p.tipoHabitacion, t.temporada, p.precio
-FROM PrecioHabitacion p
-JOIN Temporada t ON p.idPrecio = t.idPrecio;
-```
-4. Clientes y nº de reserva para aquellos que han realizado alguna reserva en marzo
-```sql
-SELECT c.*, R.idReserva
-FROM Cliente c
-LEFT JOIN ReservaHabitac R ON c.idCliente = R.cliente AND R.fechaEntrada regexp '2023-03';
-```
-5. Clientes con el mismo primer apellido
-```sql
-SELECT c1.*
-FROM Cliente c1
-JOIN Cliente c2 ON c1.primerApellido = c2.primerApellido AND c1.idCliente <> c2.idCliente;
-```
-6. Gasto en servicios realizado por cada reserva
-Asumimos que hay una tabla GastoServicio:
+Un trigger es un conjunto de instrucciones que se ejecuta automáticamente cuando ocurre un evento en la base de datos, como insertar, actualizar o eliminar datos.
+- **Ejemplos**:
 
-```sql
-SELECT r.idReserva, SUM(gs.precio) as gasto_total
-FROM ReservaHabitac r
-JOIN GastoServicio gs ON r.idReserva = gs.idReserva
-GROUP BY r.idReserva;
-```
-7. Precio del servicio más caro y del más barato
-```sql
-SELECT MAX(precio) AS maximo_precio, MIN(precio) AS minimo_precio FROM Servicio;
-```
-Resultado:
-```sql
-+---------------+---------------+
-| maximo_precio | minimo_precio |
-+---------------+---------------+
-|         10.00 |          1.00 |
-+---------------+---------------+
-```
-8. Precio de las habitaciones y sus respectivos tipos durante la temporada de verano (tipo 'A')
-```sql
-SELECT p.precio, p.tipoHabitacion 
-FROM PrecioHabitacion p 
-JOIN Temporada t ON p.idPrecio = t.idPrecio 
-WHERE t.temporada = 'A';
-```
+  - Si alguien intenta poner un precio negativo para un producto, el trigger cambia ese precio a 0 antes de guardar el dato.
+  ```sql
+  CREATE TRIGGER antesDeInsertarProducto
+  BEFORE INSERT ON Producto
+  FOR EACH ROW
+  BEGIN
+  IF NEW.precio < 0 THEN
+  SET NEW.precio = 0;
+  END IF;
+  END;
+  ```
+  - Supongamos que tenemos una tabla de empleados y queremos mantener un historial de cambios cada vez que se actualiza el salario de un empleado.
+    Tablas:
+        Empleado: idEmpleado, nombre, salario
+        HistorialSalarios: idHistorial, idEmpleado, salarioAnterior, nuevoSalario, fechaCambio
+  ```sql
+     CREATE TRIGGER actualizarHistorialSalario
+    AFTER UPDATE ON Empleado
+    FOR EACH ROW
+    BEGIN
+        IF NEW.salario != OLD.salario THEN
+            INSERT INTO HistorialSalarios (idEmpleado, salarioAnterior, nuevoSalario, fechaCambio)
+            VALUES (OLD.idEmpleado, OLD.salario, NEW.salario, NOW());
+        END IF;
+    END;
+  ```
 
-CREAR Vistas
-1. Clientes cuyo apellido incluya la sílaba "le" ordenados por su identificador
-```sql
-CREATE VIEW apellido AS 
-SELECT idCliente, primerApellido 
-FROM Cliente 
-WHERE primerApellido REGEXP 'le' 
-ORDER BY idCliente;
-```
-Consulta la vista:
+### NEW y OLD en Triggers
+- En MySQL, NEW y OLD se utilizan dentro de los triggers para referirse a los valores de las columnas antes y después de una operación que activa el trigger.
 
-```sql
-SELECT * FROM apellido;
-```
-Resultado:
-```
-+-----------+----------------+
-| idCliente | primerApellido |
-+-----------+----------------+
-| 12345     | Iglesias       |
-+-----------+----------------+
-```
-2. Clientes con alguna observación anotada ordenados por su primer apellido
-```sql
-CREATE VIEW vclientes AS 
-SELECT primerApellido, observaciones 
-FROM Cliente 
-WHERE observaciones IS NOT NULL 
-ORDER BY primerApellido;
-```
-Consulta la vista:
+  - **NEW**: Contiene los valores que tendrán las columnas después de la operación.
+        Usado en triggers **BEFORE INSERT, AFTER INSERT, BEFORE UPDATE y AFTER UPDATE**.
+  - **OLD**: Contiene los valores que tenían las columnas antes de la operación.
+        Usado en triggers **BEFORE DELETE, AFTER DELETE, BEFORE UPDATE y AFTER UPDATE.**
 
-```sql
-SELECT * FROM vclientes;
-```
-Resultado:
-```sql
-+----------------+------------------+
-| primerApellido | observaciones    |
-+----------------+------------------+
-| Iglesias       | Buen cliente     |
-| Schmidt        | Cliente exigente |
-+----------------+------------------+
-```
-3. Servicios cuyo precio supere los 5€ ordenados por su código de servicio
-```sql
-CREATE VIEW maxservicios AS 
-SELECT * 
-FROM Servicio 
-WHERE precio > 5 
-ORDER BY idServicio;
-```
-Consulta la vista:
-```sql
-SELECT * FROM maxservicios;
-```
-Resultado:
-```sql
-+------------+----------------+-----------------+--------+------+------------+
-| idServicio | nombreServicio | descripcion     | precio | iva  | fecha      |
-+------------+----------------+-----------------+--------+------+------------+
-|          1 | Comedor        | 1 menu del día  |  10.00 | 7.00 | 2023-01-01 |
-+------------+----------------+-----------------+--------+------+------------+
-```
-4. Clientes que han utilizado el servicio de comedor
-Asumimos que hay una tabla que relaciona clientes con servicios:
-```sql
-CREATE VIEW scliente AS 
-SELECT c.idCliente, c.nombre, c.primerApellido, c.segundoApellido 
-FROM Cliente c 
-JOIN ServicioCliente sc ON c.idCliente = sc.idCliente 
-JOIN Servicio s ON sc.idServicio = s.idServicio 
-WHERE s.nombreServicio = 'Comedor';
-```
-5. Características de cada habitación reservada
-Asumimos la existencia de una tabla Habitacion:
-```sql
-CREATE VIEW hab_reservadas AS 
-SELECT r.numHabitacion, h.tipo, h.capacidad, r.fechaEntrada, r.fechaSalida 
-FROM ReservaHabitac r 
-JOIN Habitacion h ON r.numHabitacion = h.numHabitacion;
-```
-6. Servicios nunca contratados
-```sql
-CREATE VIEW servicios_no_contratados AS 
-SELECT * 
-FROM Servicio s 
-WHERE NOT EXISTS (
-    SELECT 1 
-    FROM ServicioCliente sc 
-    WHERE sc.idServicio = s.idServicio
-);
-```
-7. Número de clientes por nacionalidad
-```sql
-CREATE VIEW n_clienten AS 
-SELECT pais, COUNT(idCliente) AS num_clientes 
-FROM Cliente 
-GROUP BY pais;
-```
-Consulta la vista:
-```sql
-SELECT * FROM n_clienten;
-/**Resultado:**/
+## Procedimientos Almacenados
+- Qué es un Procedimiento Almacenado?
 
-+----------+--------------+
-| pais     | num_clientes |
-+----------+--------------+
-| España   |            2 |
-| Alemania |            1 |
-| Francia  |            1 |
-| Italia   |            1 |
-+----------+--------------+
-```
-8. Número de habitaciones por categoría de habitación
-Asumimos que hay una tabla CategoriaHabitacion:
+Un procedimiento almacenado es una serie de instrucciones que puedes guardar y ejecutar cuando lo necesites. Funciona como una receta para hacer algo en la base de datos.
 
-sql
-Copiar código
-CREATE VIEW n_hab_categoria AS 
-SELECT categoria, COUNT(numHabitacion) AS num_habitaciones 
-FROM Habitacion 
-GROUP BY categoria;
-9. Número de servicios ofrecidos por tipo de servicio
-Asumimos que hay una columna tipoServicio en la tabla Servicio:
+- **Ejemplos**:
+  
+   - Un procedimiento para agregar un nuevo cliente y anotar si es un cliente internacional.
+  ```sql
+          CREATE PROCEDURE agregarCliente(
+        IN idCliente INT,
+        IN pais VARCHAR(50),
+        IN nombre VARCHAR(50),
+        IN apellido VARCHAR(50)
+    )
+    BEGIN
+        DECLARE observacion VARCHAR(100);
+        
+        IF pais != 'España' THEN
+            SET observacion = 'Cliente internacional';
+        ELSE
+            SET observacion = NULL;
+        END IF;
+        
+        INSERT INTO Cliente (idCliente, pais, nombre, apellido, observaciones)
+        VALUES (idCliente, pais, nombre, apellido, observacion);
+    END;
+    ```
+  - Supongamos que tenemos una tabla de clientes y otra de transacciones, y queremos crear un procedimiento que devuelva el saldo actual de un cliente.
+  ```sql
+        CREATE PROCEDURE obtenerSaldoCliente (IN cliente_id INT)
+    BEGIN
+        DECLARE saldo DECIMAL(10,2);
+        
+        SELECT SUM(monto) INTO saldo
+        FROM Transacciones
+        WHERE cliente_id = cliente_id;
+        
+        SELECT saldo;
+    END;
+  ```
 
-sql
-Copiar código
-CREATE VIEW nservicios AS 
-SELECT tipoServicio, COUNT(idServicio) AS num_servicios 
-FROM Servicio 
-GROUP BY tipoServicio;
-10. Datos del cliente excepto las observaciones
-sql
-Copiar código
-CREATE VIEW dcliente AS 
-SELECT idCliente, pais, nombre, primerApellido, segundoApellido, direccion, telefono 
-FROM Cliente;
-Consulta la vista:
+## Cursores
 
-sql
-Copiar código
-SELECT * FROM dcliente;
-Resultado:
+- ¿Qué es un Cursor?
 
-plaintext
-Copiar código
-+-----------+----------+----------+----------------+-----------------+------------------------+------------+
-| idCliente | pais     | nombre   | primerApellido | segundoApellido | direccion              | telefono   |
-+-----------+----------+----------+----------------+-----------------+------------------------+------------+
-| 12345     | España   | Felipe   | Iglesias       | López           | Avda Los Castros, 44   | 942344444  |
-| 43215     | Alemania | Hans     | Schmidt        | Müller          | Hauptstrasse 123       | 65890234   |
-| 44444     | España   | Cristina | García         | García          | Calle Mayor, 67        | 942456444  |
-| 45678     | Francia  | Ludovic  | Giuly          | Bourquin        | 18 avenue Alsacen Cour | 37890194   |
-| 45680     | Italia   | Giulia   | Bianchi        | NULL            | Via Verdi 5            | 3209876543 |
-+-----------+----------+----------+----------------+-----------------+------------------------+------------+
-11. Datos del cliente y el gasto total realizado
-Asumimos que hay una tabla Factura:
+Un cursor te permite revisar filas de una tabla una por una, para hacer algo con cada fila.
+   
+- **Ejemplos**:
 
-sql
-Copiar código
-CREATE VIEW gasto_cliente AS 
-SELECT c.idCliente, c.nombre, c.primerApellido, SUM(f.total) AS gasto_total 
-FROM Cliente c 
-JOIN ReservaHabitac r ON c.idCliente = r.cliente 
-JOIN Factura f ON r.idReserva = f.idReserva 
-GROUP BY c.idCliente;
-Índices
-1. Índice sobre el atributo pais de la tabla Cliente
-sql
-Copiar código
-CREATE INDEX indx_cliente ON Cliente(pais);
+  - Revisar todas las reservas en una fecha específica y actualizar el estado de las habitaciones a "Reservada".
+ 
+    ```sql
+        CREATE PROCEDURE revisarReservas(fecha DATE)
+    BEGIN
+        DECLARE done INT DEFAULT 0;
+        DECLARE numHabitacion INT;
+        DECLARE cursorReservas CURSOR FOR
+            SELECT numHabitacion FROM Reserva WHERE fechaEntrada = fecha;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+        
+        OPEN cursorReservas;
+        leerReservas: LOOP
+            FETCH cursorReservas INTO numHabitacion;
+            IF done THEN
+                LEAVE leerReservas;
+            END IF;
+            
+            UPDATE Habitacion SET estado = 'Reservada' WHERE numHabitacion = numHabitacion;
+        END LOOP leerReservas;
+        
+        CLOSE cursorReservas;
+    END;
+    ```
 
-EXPLAIN SELECT * FROM Cliente WHERE pais = 'España';
-Resultado del EXPLAIN:
+    - Supongamos que tienes una tabla de empleados y quieres incrementar el salario de cada empleado en un cierto porcentaje.
 
-plaintext
-Copiar código
-+----+-------------+---------+------------+------+---------------+------+---------+-------+------+----------+-----------------------+
-| id | select_type | table   | partitions | type | possible_keys | key  | key_len | ref   | rows | filtered | Extra                 |
-+----+-------------+---------+------------+------+---------------+------+---------+-------+------+----------+-----------------------+
-|  1 | SIMPLE      | Cliente | NULL       | ref  | pais          | pais | 80      | const |    2 |   100.00 | Using index condition |
-+----+-------------+---------+------------+------+---------------+------+---------+-------+------+----------+-----------------------+
-2. Índice sobre el atributo numHabitacion de la tabla ReservaHabitac
-sql
-Copiar código
-CREATE INDEX indx_numhab ON ReservaHabitac(numHabitacion);
-
-EXPLAIN SELECT * FROM ReservaHabitac WHERE numHabitacion = 101;
-Resultado del EXPLAIN:
-
-plaintext
-Copiar código
-+----+-------------+----------------+------------+------+---------------+-------------+---------+-------+------+----------+-------+
-| id | select_type | table          | partitions | type | possible_keys | key         | key_len | ref   | rows | filtered | Extra |
-+----+-------------+----------------+------------+------+---------------+-------------+---------+-------+------+----------+-------+
-|  1 | SIMPLE      | ReservaHabitac | NULL       | ref  | indx_numhab   | indx_numhab | 4       | const |    1 |   100.00 | NULL  |
-+----+-------------+----------------+------------+------+---------------+-------------+---------+-------+------+----------+-------+
-3. Índice sobre el atributo nombreServicio de la tabla Servicio
-sql
-Copiar código
-CREATE INDEX indx_num_serv ON Servicio(nombreServicio);
-
-EXPLAIN SELECT * FROM Servicio WHERE nombreServicio = 'Comedor';
-Resultado del EXPLAIN:
-
-plaintext
-Copiar código
-+----+-------------+----------+------------+------+----------------+----------------+---------+-------+------+----------+-----------------------+
-| id | select_type | table    | partitions | type | possible_keys  | key            | key_len | ref   | rows | filtered | Extra                 |
-+----+-------------+----------+------------+------+----------------+----------------+---------+-------+------+----------+-----------------------+
-|  1 | SIMPLE      | Servicio | NULL       | ref  | nombreServicio | nombreServicio | 40      | const |    1 |   100.00 | Using index condition |
-+----+-------------+----------+------------+------+----------------+----------------+---------+-------+------+----------+-----------------------+
-Estas consultas y vistas deben cubrir las necesidades solicitadas. Para ejecutar y verificar cada consulta, asegúrate de tener la estructura de la base de datos y los datos correctos en tu entorno SQL.
+    ```sql
+    CREATE PROCEDURE aumentarSalarios(porcentaje INT)
+    BEGIN
+        DECLARE done BOOLEAN DEFAULT FALSE;
+        DECLARE salario_actual DECIMAL(10, 2);
+        DECLARE cur CURSOR FOR SELECT salario FROM Empleados;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO salario_actual;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE Empleados SET salario = salario + (salario * porcentaje / 100);
+    END LOOP;
+    CLOSE cur;
+    END;
+    ```
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+##
