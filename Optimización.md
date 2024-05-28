@@ -114,7 +114,7 @@ Un cursor te permite revisar filas de una tabla una por una, para hacer algo con
     END;
     ```
 
-    - Supongamos que tienes una tabla de empleados y quieres incrementar el salario de cada empleado en un cierto porcentaje.
+   - Supongamos que tienes una tabla de empleados y quieres incrementar el salario de cada empleado en un cierto porcentaje.
 
     ```sql
     CREATE PROCEDURE aumentarSalarios(porcentaje INT)
@@ -135,7 +135,7 @@ Un cursor te permite revisar filas de una tabla una por una, para hacer algo con
     CLOSE cur;
     END;
     ```
-
+## Funciones
 
 
 
@@ -161,4 +161,3 @@ Un cursor te permite revisar filas de una tabla una por una, para hacer algo con
 
 
   
-##
