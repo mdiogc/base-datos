@@ -180,11 +180,40 @@ DELIMITER ;
 
 
 
+```sql
+DROP PROCEDURE IF EXISTS rango_salario;
+DELIMITER //
+CREATE PROCEDURE rango_salario(IN limite_minimo DECIMAL(10,2), IN limite_maximo DECIMAL(10,2))
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE emp_count INT DEFAULT 0;
+  DECLARE emp_salario DECIMAL(10, 2);
+  DECLARE cur CURSOR FOR SELECT salario FROM empleados WHERE salario BETWEEN limite_minimo AND limite_maximo;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur;
+  read_loop: LOOP
+    FETCH cur INTO emp_salario;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+      SET emp_count = emp_count + 1;    
+  END LOOP;
+  CLOSE cur;
+
+  SELECT emp_count AS resultado;
+END //
+DELIMITER ;
+```
 
 
-
-
-
-
+```sql
+call rango_salario(1000, 3500);
++-----------+
+| resultado |
++-----------+
+|         3 |
++-----------+
+```
 
 </div>
